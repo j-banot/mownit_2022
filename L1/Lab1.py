@@ -1,4 +1,4 @@
-from numpy import double, single, finfo
+from numpy import double, single
 import matplotlib.pyplot as plt
 
 
