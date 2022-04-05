@@ -1,6 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib import cm
 from scipy.interpolate import barycentric_interpolate, CubicSpline, Akima1DInterpolator
+from mpl_toolkits.mplot3d import Axes3D
 
 
 def fun(x: float):
@@ -34,7 +36,7 @@ def zad1():
     plt.show()
 
 
-def read_from_file(list_x, list_y, file_name):
+def read_from_file1(list_x, list_y, file_name):
     with open(file_name) as tmp:
         for line in tmp:
             list = line.split(";")
@@ -45,16 +47,43 @@ def read_from_file(list_x, list_y, file_name):
 def zad2():
     list_x = []
     list_y = []
-    read_from_file(list_x, list_y, "dane1.txt")
+    read_from_file1(list_x, list_y, "dane1.txt")
     plt.xscale("log")
     plt.plot(list_x, list_y, label="dane1.dat")
     plt.legend()
     plt.show()
 
 
+def read_from_file2(list_x, list_y, list_z, file_name):
+    with open(file_name) as tmp:
+        for line in tmp:
+            list = line.split(";")
+            list_x.append(float(list[0]))
+            list_y.append(float(list[1]))
+            list_z.append(float(list[2]))
+
+
+def zad3():
+    list_x = []
+    list_y = []
+    list_z = []
+    read_from_file2(list_x, list_y, list_z, "dane2.txt")
+    list_x = np.reshape(list_x, (-1, 2))
+    list_y = np.reshape(list_y, (-1, 2))
+    list_z = np.reshape(list_z, (-1, 2))
+    fig = plt.figure()
+    ax = plt.axes(projection='3d')
+    ax.contour3D(list_x, list_y, list_z, 1000, cmap=cm.cool)
+    ax.set_xlabel('x')
+    ax.set_ylabel('y')
+    ax.set_zlabel('z')
+    plt.show()
+
+
 def main():
     # zad1()
-    zad2()
+    # zad2()
+    zad3()
 
 
 if __name__ == "__main__":
