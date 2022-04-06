@@ -1,12 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm
+from matplotlib.patches import FancyArrowPatch
 from scipy.interpolate import barycentric_interpolate, CubicSpline, Akima1DInterpolator
-from mpl_toolkits.mplot3d import Axes3D
-
-
-def fun(x: float):
-    return x + np.cos(x * x)
+from mpl_toolkits.mplot3d import Axes3D, proj3d
 
 
 def zad1():
@@ -39,9 +36,9 @@ def zad1():
 def read_from_file1(list_x, list_y, file_name):
     with open(file_name) as tmp:
         for line in tmp:
-            list = line.split(";")
-            list_x.append(float(list[0]))
-            list_y.append(float(list[1]))
+            tmp_list = line.split(";")
+            list_x.append(float(tmp_list[0]))
+            list_y.append(float(tmp_list[1]))
 
 
 def zad2():
@@ -57,10 +54,10 @@ def zad2():
 def read_from_file2(list_x, list_y, list_z, file_name):
     with open(file_name) as tmp:
         for line in tmp:
-            list = line.split(";")
-            list_x.append(float(list[0]))
-            list_y.append(float(list[1]))
-            list_z.append(float(list[2]))
+            tmp_list = line.split(";")
+            list_x.append(float(tmp_list[0]))
+            list_y.append(float(tmp_list[1]))
+            list_z.append(float(tmp_list[2]))
 
 
 def zad3():
@@ -71,19 +68,63 @@ def zad3():
     list_x = np.reshape(list_x, (-1, 2))
     list_y = np.reshape(list_y, (-1, 2))
     list_z = np.reshape(list_z, (-1, 2))
-    fig = plt.figure()
     ax = plt.axes(projection='3d')
     ax.contour3D(list_x, list_y, list_z, 1000, cmap=cm.cool)
     ax.set_xlabel('x')
     ax.set_ylabel('y')
     ax.set_zlabel('z')
+    a = Arrow3D([2, 3], [2, 5], [0.75, 0.75],
+                mutation_scale=30,
+                lw=4, arrowstyle="-|>", color="g")
+    ax.add_artist(a)
     plt.show()
+
+
+def zad4():
+    list_x = []
+    list_y = []
+    list_z = []
+    read_from_file2(list_x, list_y, list_z, "fun1.txt")
+    x = np.arange(-3, 3, 0.1)
+    y_fun2 = np.sin(x ** 5)
+    y_fun1 = np.cos(x * np.sin(x))
+    y_fun3 = 3 * np.sin(x)
+    plt.bar(x, y_fun1, align='center', width=0.1, edgecolor="red", color="none",
+            label="funkcja 1: 2*cos(x*sin(x))")
+    plt.plot(x, y_fun2, label="funkcja 2: sin(x^5)")
+    plt.plot(x, y_fun3, color="green", label="funkcja 3: 3*sin(x)")
+    plt.plot(list_x, list_y, "g_")
+    plt.plot(list_x, list_z, "g_")
+    plt.vlines(list_x, list_y, list_z, color="green", label="Dane z pliku fun1.txt")
+    plt.title("Wykres Testowy")
+    plt.ylabel("Amplituda")
+    plt.legend()
+    plt.grid()
+    plt.show()
+
+
+class Arrow3D(FancyArrowPatch):
+    def __init__(self, xs, ys, zs, *args, **kwargs):
+        super().__init__((0,0), (0,0), *args, **kwargs)
+        self._verts3d = xs, ys, zs
+
+    def do_3d_projection(self, renderer=None):
+        xs3d, ys3d, zs3d = self._verts3d
+        xs, ys, zs = proj3d.proj_transform(xs3d, ys3d, zs3d, self.axes.M)
+        self.set_positions((xs[0],ys[0]),(xs[1],ys[1]))
+
+        return np.min(zs)
+
+
+def fun(x: float):
+    return x + np.cos(x * x)
 
 
 def main():
     # zad1()
     # zad2()
-    zad3()
+    # zad3()
+    zad4()
 
 
 if __name__ == "__main__":
