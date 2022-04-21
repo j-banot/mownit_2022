@@ -1,37 +1,28 @@
 import math
 import numpy as np
-import numpy.polynomial.chebyshev as c
-import matplotlib.pyplot as plt
+import chebyshev as c
 
 
 def exp_func(x):
-    return math.exp(x**2)
+    return math.e**(x**2)
 
 
 def abs_func(x):
-    return math.fabs(x)
+    return abs(x+x**3)
 
 
 def sign_func(x):
-    if x > 0:
-        return 1
-    if x == 0:
-        return 0
-    else:
-        return -1
+    return np.sign(x)
 
 
-def zad1_1():
-    x = np.arange(-1, 1, 0.1)
-    y = [exp_func(i) for i in np.arange(-1, 1, 0.1)]
-    # results = c.chebfit(x, y, 19)
-    print(len(x))
-    plt.plot(x, y)
-    plt.show()
+def zad1():
+    c.draw_plots(exp_func, "y = exp((x**2), <-1,1>")
+    # c.draw_plots(abs_func, "y = abs(x+x**3), <-1,1>")
+    # c.draw_plots(sign_func, "y = sign(x), <-1,1>")
 
 
 def main():
-    zad1_1()
+    zad1()
 
 
 if __name__ == "__main__":
