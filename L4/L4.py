@@ -11,22 +11,22 @@ def f2(x: float) -> float:
 
 def calculate_integral(f, a, b, n):
     dx = (b - a) / n
-    sum1 = 0
+    integral = 0
 
     for i in range(1, n+1):
-        x = a + 1 * dx
-        sum1 += f(x)
+        i = i * dx + a
+        integral += dx * f(i)
 
-    result = dx * sum1
-    print(f"Result for {n} intervals: {result} \n")
+    print(f"Result for {n} intervals: {integral} \n")
+    return integral
 
 
 def main():
     print("x^2:")
-    calculate_integral(f1, 0, 1, 501)
+    calculate_integral(f1, 0, 1, 1000)
 
     print("1/sqrt(x):")
-    calculate_integral(f2, 0, 1, 501)
+    calculate_integral(f2, 0, 1, 1000)
 
 
 if __name__ == "__main__":
